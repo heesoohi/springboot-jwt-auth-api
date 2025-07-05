@@ -111,6 +111,29 @@ class AuthServiceTest {
     }
 
     @Test
+    void 로그인_실패_비밀번호_불일치() {
+        // given
+        User user = User.builder()
+                .username("testuser")
+                .password("encodedPassword")
+                .userRoles(Set.of(UserRole.USER))
+                .build();
+        userRepository.save(user);
+
+        SignInRequest request = SignInRequest.builder()
+                .username("testuser")
+                .password("wrongPassword")
+                .build();
+
+        when(passwordEncoder.matches("wrongPassword", "encodedPassword")).thenReturn(false);
+
+        // when & then
+        AuthException exception = assertThrows(AuthException.class, () -> authService.signIn(request));
+        assertEquals("INVALID_CREDENTIALS", exception.getCode());
+    }
+
+
+    @Test
     void 관리자_권한_부여_성공() {
         // given
         User user = User.builder()
