@@ -61,6 +61,29 @@ class AuthServiceTest {
     }
 
     @Test
+    void 회원가입_실패_중복_사용자() {
+        // given
+        User existingUser = User.builder()
+                .username("testuser")
+                .nickname("existingNick")
+                .password("encodedPassword")
+                .userRoles(Set.of(UserRole.USER))
+                .build();
+        userRepository.save(existingUser);
+
+        SignUpRequest request = SignUpRequest.builder()
+                .username("testuser")
+                .nickname("newNick")
+                .password("password123")
+                .build();
+
+        // when & then
+        AuthException exception = assertThrows(AuthException.class, () -> authService.signUp(request));
+        assertEquals("USER_ALREADY_EXISTS", exception.getCode());
+    }
+
+
+    @Test
     void 로그인_성공() {
         // given
         User user = User.builder()
