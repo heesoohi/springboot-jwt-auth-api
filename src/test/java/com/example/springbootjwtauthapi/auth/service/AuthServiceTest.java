@@ -5,6 +5,7 @@ import com.example.springbootjwtauthapi.auth.dto.SignUpRequest;
 import com.example.springbootjwtauthapi.auth.dto.SignUpResponse;
 import com.example.springbootjwtauthapi.auth.dto.TokenResponse;
 import com.example.springbootjwtauthapi.auth.jwt.JwtUtil;
+import com.example.springbootjwtauthapi.exception.AuthException;
 import com.example.springbootjwtauthapi.user.entity.User;
 import com.example.springbootjwtauthapi.user.enums.UserRole;
 import com.example.springbootjwtauthapi.user.repository.UserRepository;
@@ -106,5 +107,12 @@ class AuthServiceTest {
         assertTrue(updated.isPresent());
         assertTrue(updated.get().getUserRoles().contains(UserRole.ADMIN));
         assertEquals(updated.get().getUsername(), response.getUsername());
+    }
+
+    @Test
+    void 관리자_권한_부여_실패_사용자없음() {
+        // when & then
+        AuthException exception = assertThrows(AuthException.class, () -> authService.grantAdminRole(-1L));
+        assertEquals("USER_NOT_FOUND", exception.getCode());
     }
 }
