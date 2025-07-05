@@ -24,7 +24,7 @@ import java.util.Collections;
 public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
-        String[] packages = {"com.example.intern_assignment"};
+        String[] packages = {"com.example.springbootjwtauthapi"};
         return GroupedOpenApi.builder()
                 .group("default")
                 .packagesToScan(packages)
