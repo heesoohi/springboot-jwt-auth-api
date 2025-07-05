@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @Operation(summary = "로그인", description = "로그인 API입니다.")
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<TokenResponse> signin(
             @RequestBody SignInRequest request
     ) {
