@@ -1,7 +1,9 @@
 package com.example.springbootjwtauthapi.auth.service;
 
+import com.example.springbootjwtauthapi.auth.dto.SignInRequest;
 import com.example.springbootjwtauthapi.auth.dto.SignUpRequest;
 import com.example.springbootjwtauthapi.auth.dto.SignUpResponse;
+import com.example.springbootjwtauthapi.auth.dto.TokenResponse;
 import com.example.springbootjwtauthapi.auth.jwt.JwtUtil;
 import com.example.springbootjwtauthapi.user.entity.User;
 import com.example.springbootjwtauthapi.user.enums.UserRole;
@@ -15,6 +17,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -54,4 +58,30 @@ class AuthServiceTest {
         assertEquals(request.getNickname(), response.getNickname());
     }
 
+    @Test
+    void 로그인_성공() {
+        // given
+        User user = User.builder()
+                .id(1L)
+                .username("testuser")
+                .password("encodedPassword")
+                .userRoles(Set.of(UserRole.USER))
+                .build();
+
+        userRepository.save(user);
+
+        SignInRequest request = SignInRequest.builder()
+                .username("testuser")
+                .password("password123")
+                .build();
+
+        when(passwordEncoder.matches("password123", "encodedPassword")).thenReturn(true);
+        when(jwtUtil.createAccessToken(anyLong(), eq("testuser"), eq(Set.of(UserRole.USER)))).thenReturn("mocked.jwt.token");
+
+        // when
+        TokenResponse response = authService.signIn(request);
+
+        // then
+        assertEquals("mocked.jwt.token", response.getToken());
+    }
 }
