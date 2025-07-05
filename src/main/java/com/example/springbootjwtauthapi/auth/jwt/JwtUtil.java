@@ -18,7 +18,7 @@ import java.util.Set;
 public class JwtUtil {
 
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 1시간
+    private static final long ACCESS_TOKEN_TIME = 2* 60 * 60 * 1000L; // 2시간
 
     @Value("${jwt.secret.key}")
     private String secretKey;
