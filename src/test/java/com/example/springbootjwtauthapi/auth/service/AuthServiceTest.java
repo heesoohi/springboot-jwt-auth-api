@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -83,5 +84,27 @@ class AuthServiceTest {
 
         // then
         assertEquals("mocked.jwt.token", response.getToken());
+    }
+
+    @Test
+    void 관리자_권한_부여_성공() {
+        // given
+        User user = User.builder()
+                .username("testuser")
+                .nickname("nickname")
+                .password("encodedPassword")
+                .userRoles(new HashSet<>(Set.of(UserRole.USER)))
+                .build();
+
+        user =  userRepository.save(user);
+
+        // when
+        SignUpResponse response = authService.grantAdminRole(user.getId());
+
+        // then
+        Optional<User> updated = userRepository.findById(user.getId());
+        assertTrue(updated.isPresent());
+        assertTrue(updated.get().getUserRoles().contains(UserRole.ADMIN));
+        assertEquals(updated.get().getUsername(), response.getUsername());
     }
 }
