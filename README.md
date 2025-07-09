@@ -49,8 +49,10 @@ git clone https://github.com/heesoohi/springboot-jwt-auth-api.git
 
 ## 📄 API 명세
 API 명세는 Swagger UI를 통해 확인 가능합니다.
-- **Swagger UI 주소**:  
+- **Swagger UI 주소** (종료됨):  
   [http://52.79.129.196:8080/swagger-ui/index.html](http://52.79.129.196:8080/swagger-ui/index.html)
+EC2 인스턴스 종료로 인해 현재는 접근이 불가능합니다.
+
 
 ![img.png](img.png)
 ---
